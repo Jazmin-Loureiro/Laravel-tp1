@@ -1,14 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 
 // HOME ROUTES
-Route::get('/', function () {
-    return view('home');
-});
-// AUTH ROUTES
+Route::get('/', [HomeController::class, 'getHome'])->name('home');
+// AUTH ROUTES FALTA REVISAR
 Route::get('/login', function () {
     return view('auth.login');
 });
@@ -24,7 +23,6 @@ Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->name('posts.edi
 //actualizar post por id
 Route::post('/posts/update/{id}', [PostController::class, 'update'])->name('posts.update');
 
-
 // Mostrar formulario para crear post
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
 // Guardar nuevo post
@@ -33,15 +31,9 @@ Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
 
 
 // CATEGORY ROUTES
-Route::get('/category', [CategoryController::class, 'index']);
-Route::get('/category/show/{id}', [CategoryController::class, 'getShow']);
-
-
-Route::get('/category/create', function () {
-    return view('category.create');
-});
-
-Route::get('/category/edit/{id}', function ($id) {
-    return view('category.edit', ['id' => $id]);
-});
-
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/category/show/{id}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::post('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+Route::post('/category', [CategoryController::class, 'store'])->name('category.store');

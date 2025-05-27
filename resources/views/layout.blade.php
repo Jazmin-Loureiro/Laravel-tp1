@@ -55,21 +55,22 @@
 <body>
 
     <!-- Navbar -->
-    <nav>
-        <div class="navbar-container">
-            <a href="{{ url('/') }}" class="logo">Mi Blog</a>
-            <div>
-                <a href="{{ url('/') }}">Inicio</a>
-                 <a href="{{ url('/posts') }}">Posts</a>
-                <a href="{{ url('/posts/create') }}">Añadir Post</a>
-                <!-- Enlace a la página de categorías -->
-                <a href="{{ url('/category') }}">Categorias</a>
-                <!--SESIONES-->
-                <a href="{{ url('/login') }}">Iniciar Sesión</a>
-                <!-- <a href="{{ url('/logout') }}">Cerrar Sesión</a> -->
-            </div>
+  <nav>
+    <div class="navbar-container">
+        <a href="{{ route('home') }}" class="logo">Mi Blog</a>
+        <div>
+            <a href="{{ route('home') }}">Inicio</a>
+            <a href="{{ route('posts.index') }}">Posts</a>
+            <a href="{{ route('posts.create') }}">Añadir Post</a>
+            <a href="{{ route('category.index') }}">Categorías</a>
+            <a href="{{ route('category.create') }}">Añadir Categoría</a>
+
+            <a href="{{ url('/login') }}">Iniciar Sesión</a>
+            <!-- <a href="{{ url('/logout') }}">Cerrar Sesión</a> -->
         </div>
-    </nav>
+    </div>
+</nav>
+
 
     <!-- Contenido -->
     <main>

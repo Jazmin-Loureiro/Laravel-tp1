@@ -3,12 +3,6 @@
 @section('content')
 
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9fafb;
-    color: #333;
-  }
-
   .form {
     max-width: 500px;
     margin: 50px auto;
