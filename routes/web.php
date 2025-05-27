@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+
 
 Route::get('/', function () {
     return view('home');
@@ -10,13 +12,10 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
-Route::get('/category', function () {
-    return view('category.index');
-});
+Route::get('/category', [PostController::class, 'index']);
 
-Route::get('/category/show/{id}', function ($id) {
-    return view('category.show', ['id' => $id]);
-});
+Route::get('/category/show/{id}', [PostController::class, 'getShow']);
+
 
 Route::get('/category/create', function () {
     return view('category.create');
