@@ -6,56 +6,79 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Funcion que muestra la lista de posts 
      */
-     public function index()
-    {
-        $posts = Post::all();
-        return view('posts.index', ['posts' => $posts]);
+    public function index() {
+    $posts = Post::all();
+    return view('posts.index', compact('posts'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('posts.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
- /**
- * Display the specified resource.
- */
-public function getShow($id)
-{
+     /**
+    * Funcion que muestra un post especifico por id
+    */
+    public function show($id) {
     $post = Post::findOrFail($id);
     return view('posts.show', ['post' => $post]);
-}
+    }
 
-
-
-    /**
-     * Show the form for editing the specified resource.
+     /**
+     * Muestra el formulario para editar un post específico.
      */
     public function edit(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return view('posts.edit', ['post' => $post]);
+    }
+
+   /**
+    * Muestra el formulario para crear un nuevo post.
+    */
+    public function create() {
+    return view('posts.create');}
+
+    /**
+     * Crea un nuevo post en la base de datos.
+     * Valida los datos del formulario y guarda el post.
+     * Redirige a la lista de posts con un mensaje de éxito.
+     */
+    public function store(Request $request) {
+    $validated = $request->validate([
+        'title' => 'required|string|max:255', // Validar que no esté vacío y tenga un máximo de 255 caracteres
+        'poster' => 'required|url', // Validar que sea una URL
+        'content' => 'required|string', // Validar que no esté vacío
+    ]);
+
+    $post = new Post();
+    $post->title = $validated['title'];
+    $post->poster = $validated['poster'];
+    $post->content = $validated['content'];
+
+    $post->save(); // Guardar el post en la base de datos
+    // Redirigir a la lista de posts con un mensaje de éxito
+    return redirect()->route('posts.index')->with('success', 'Post creado correctamente');
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    * Actualiza un post existente en la base de datos.
+    */
+    public function update(Request $request, string $id) {
+    $post = Post::findOrFail($id);
+
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'poster' => 'required|url',
+        'content' => 'required|string',
+        'habilitated' => 'required|in:0,1',
+    ]);
+
+    $post->title = $validated['title'];
+    $post->poster = $validated['poster'];
+    $post->content = $validated['content'];
+    $post->habilitated = $validated['habilitated'] == '1'; // convertir a booleano
+
+    $post->save();
+    return redirect()->route('posts.show', $post->id)
+                     ->with('success', 'Post actualizado correctamente');
     }
 
     /**

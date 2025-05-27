@@ -14,11 +14,22 @@ Route::get('/login', function () {
 });
 
 // POST ROUTES
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/show/{id}', [PostController::class, 'getShow']);
-Route::get('/posts/create', [PostController::class, 'create']);
-Route::post('/posts/store', [PostController::class, 'store']);
-Route::get('/posts/edit/{id}', [PostController::class, 'edit']);
+//Ver lista de posts
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+//ver post por id
+Route::get('/posts/show/{id}', [PostController::class, 'show'])->name('posts.show');
+
+//editar post por id
+Route::get('/posts/edit/{id}', [PostController::class, 'edit'])->name('posts.edit');
+//actualizar post por id
+Route::post('/posts/update/{id}', [PostController::class, 'update'])->name('posts.update');
+
+
+// Mostrar formulario para crear post
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+// Guardar nuevo post
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+
 
 
 // CATEGORY ROUTES
