@@ -41,6 +41,15 @@
             font-size: 1.25rem;
         }
 
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
     </style>
 </head>
 <body>
@@ -51,10 +60,13 @@
             <a href="{{ url('/') }}" class="logo">Mi Blog</a>
             <div>
                 <a href="{{ url('/') }}">Inicio</a>
+                 <a href="{{ url('/posts') }}">Posts</a>
+                <a href="{{ url('/posts/create') }}">Añadir Post</a>
+                <!-- Enlace a la página de categorías -->
                 <a href="{{ url('/category') }}">Categorias</a>
-                <a href="{{ url('/category/create') }}">Añadir Post</a>
+                <!--SESIONES-->
                 <a href="{{ url('/login') }}">Iniciar Sesión</a>
-              <!-- <a href="{{ url('/logout') }}">Cerrar Sesión</a> -->
+                <!-- <a href="{{ url('/logout') }}">Cerrar Sesión</a> -->
             </div>
         </div>
     </nav>

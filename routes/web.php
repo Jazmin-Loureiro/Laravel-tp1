@@ -1,20 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 
-
+// HOME ROUTES
 Route::get('/', function () {
     return view('home');
 });
-
+// AUTH ROUTES
 Route::get('/login', function () {
     return view('auth.login');
 });
 
-Route::get('/category', [PostController::class, 'index']);
+// POST ROUTES
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/show/{id}', [PostController::class, 'getShow']);
+Route::get('/posts/create', [PostController::class, 'create']);
+Route::post('/posts/store', [PostController::class, 'store']);
+Route::get('/posts/edit/{id}', [PostController::class, 'edit']);
 
-Route::get('/category/show/{id}', [PostController::class, 'getShow']);
+
+// CATEGORY ROUTES
+Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/category/show/{id}', [CategoryController::class, 'getShow']);
 
 
 Route::get('/category/create', function () {
