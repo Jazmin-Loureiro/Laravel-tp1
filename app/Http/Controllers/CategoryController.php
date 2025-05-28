@@ -11,30 +11,15 @@ class CategoryController extends Controller
     public function index()
     {
     $categories = Category::all();
-    return view('category.index', compact('categories'));}
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('category.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    return view('categories.index', compact('categories'));}
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        return view('category.show', ['id' => $id]);
+        $category = Category::findOrFail($id);
+        return view('categories.show', ['category' => $category]);
     }
 
     /**
@@ -42,15 +27,54 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        return view('category.edit', ['id' => $id]);
+        $category = Category::findOrFail($id);
+        return view('categories.edit', ['category' => $category]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('categories.create');
+    }
+
+    
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255', 
+        'description' => 'required|string',
+    ]);
+
+    $category = new Category();
+    $category->name = $validated['name'];
+    $category->description = $validated['description'];
+
+    $category->save(); // Guardar el post en la base de datos
+    // Redirigir a la lista de posts con un mensaje de éxito
+    return redirect()->route('categories.index')->with('success', 'Categoria creada correctamente');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, string $id) {
+    $category = Category::findOrFail($id);
+
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+    ]);
+
+    $category->name = $validated['name'];
+    $category->description = $validated['description'];
+
+    $category->save();
+    return redirect()->route('categories.show', $category->id)
+                     ->with('success', 'Categoria actualizada correctamente');
     }
 
     /**

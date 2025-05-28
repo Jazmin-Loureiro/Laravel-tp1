@@ -62,8 +62,8 @@
             <a href="{{ route('home') }}">Inicio</a>
             <a href="{{ route('posts.index') }}">Posts</a>
             <a href="{{ route('posts.create') }}">Añadir Post</a>
-            <a href="{{ route('category.index') }}">Categorías</a>
-            <a href="{{ route('category.create') }}">Añadir Categoría</a>
+            <a href="{{ route('categories.index') }}">Categorías</a>
+            <a href="{{ route('categories.create') }}">Añadir Categoría</a>
 
             <a href="{{ url('/login') }}">Iniciar Sesión</a>
             <!-- <a href="{{ url('/logout') }}">Cerrar Sesión</a> -->
