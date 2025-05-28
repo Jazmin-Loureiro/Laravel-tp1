@@ -40,14 +40,14 @@
           <span class="hidden group-hover:inline">Añadir Post</span>
         </a>
 
-        <a href="{{ route('category.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+        <a href="{{ route('categories.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
           <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
           <span class="hidden group-hover:inline">Categorías</span>
         </a>
 
-        <a href="{{ route('category.create') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+        <a href="{{ route('categories.create') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
           <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
