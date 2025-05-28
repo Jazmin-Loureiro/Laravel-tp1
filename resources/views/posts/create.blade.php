@@ -1,112 +1,51 @@
 @extends('layout')
 
 @section('content')
+<div class="flex flex-col items-center justify-center">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">Agregar Post</h2>
 
-<style>
-  .form {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px 25px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    transition: box-shadow 0.3s ease;
-  }
-  .form:hover {
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  }
+    <form class="flex flex-col" action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+     <input type="text" id="title" name="title" value="{{ old('title') }}" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4" placeholder="Título" required>
+     
+     <textarea id="content" name="content" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4" placeholder="Contenido" required>{{ old('content') }}</textarea>
 
-  .form-row {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+      <input type="file" id="poster" name="poster"  class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-2" required accept="image/*">
+      @error('poster')
+        <p class="text-sm text-red-500 mb-3">{{ $message }}</p>
+      @enderror
+      <!-- Imagen previa -->
+      <img id="preview" class="w-full h-auto rounded-md mt-2 hidden" />
 
-  .form-row label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #444;
-    user-select: none;
-  }
+      <button type="submit" class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150">
+        Subir
+      </button>
+    </form>
+  </div>
+</div>
 
-  .form-row input[type="text"],
-  .form-row select,
-  .form-row textarea {
-    padding: 12px 15px;
-    font-size: 1rem;
-    border: 1.8px solid #ddd;
-    border-radius: 8px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    font-family: inherit;
-    resize: vertical;
-  }
-
-  .form-row input[type="text"]:focus,
-  .form-row select:focus,
-  .form-row textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-  }
-
-  .form-row textarea {
-    min-height: 130px;
-  }
-
-  .form img {
-    display: block;
-    max-width: 100%;
-    border-radius: 10px;
-    margin: 0 auto 25px auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-
-  .submit {
-    width: 100%;
-    padding: 14px 0;
-    background: #007bff;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 1.15rem;
-    font-weight: 700;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.25s ease;
-  }
-  .submit:hover {
-    background-color: #0056b3;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 35px;
-    font-weight: 700;
-    color: #222;
-    user-select: none;
-  }
-</style>
-
-<h1>Agregar Post</h1>
-
-<form class="form" action="{{ route('posts.store') }}" method="POST">
-    @csrf
-    <div class="form-row">
-      <label for="title">Título</label>
-      <input type="text" id="title" name="title" required>
-    </div>
-
-    <div class="form-row">
-      <label for="poster">Poster URL</label>
-      <input type="text" id="poster" name="poster" required>
-    </div>
-
-    <div class="form-row">
-      <label for="content">Contenido</label>
-      <textarea id="content" name="content" required></textarea>
-    </div>
-
-    <button type="submit" class="submit">Crear Post</button>
-</form>
 
 @endsection
+
+<!-- Script para vista previa -->
+<script>
+  const posterInput = document.getElementById('poster');
+  const previewImg = document.getElementById('preview');
+
+  posterInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.src = '';
+      previewImg.classList.add('hidden');
+    }
+  });
+</script>

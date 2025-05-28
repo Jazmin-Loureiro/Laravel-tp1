@@ -41,22 +41,31 @@ class PostController extends Controller
      * Valida los datos del formulario y guarda el post.
      * Redirige a la lista de posts con un mensaje de éxito.
      */
-    public function store(Request $request) {
-    $validated = $request->validate([
-        'title' => 'required|string|max:255', // Validar que no esté vacío y tenga un máximo de 255 caracteres
-        'poster' => 'required|url', // Validar que sea una URL
-        'content' => 'required|string', // Validar que no esté vacío
-    ]);
+   public function store(Request $request)
+{
+    $validated = $request->validate(
+        [
+            'title' => 'required|string|max:255',
+            'poster' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'content' => 'required|string',
+        ],
+        [
+            'poster.required' => 'Debes subir una imagen.',
+            'poster.image' => 'El archivo debe ser una imagen.',
+        ]
+    );
+
+    $imagePath = $request->file('poster')->store('posters', 'public');
 
     $post = new Post();
     $post->title = $validated['title'];
-    $post->poster = $validated['poster'];
+    $post->poster = $imagePath;
     $post->content = $validated['content'];
 
-    $post->save(); // Guardar el post en la base de datos
-    // Redirigir a la lista de posts con un mensaje de éxito
+    $post->save();
+
     return redirect()->route('posts.index')->with('success', 'Post creado correctamente');
-    }
+}
 
     /**
     * Actualiza un post existente en la base de datos.
