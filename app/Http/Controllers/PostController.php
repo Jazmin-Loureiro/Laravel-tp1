@@ -77,7 +77,6 @@ class PostController extends Controller
     $habilitated = $request->boolean('habilitated'); // ← convierte 'true' o '1' a booleano real
     $validated = $request->validate([
         'title' => 'required|string|max:255',
-        'poster' => 'required',
         'content' => 'required|string',
         'habilitated' => 'required|boolean',
         'category_id' => 'required|exists:categories,id',

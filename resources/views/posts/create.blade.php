@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+<div class="flex  justify-center bg-gray-100">
   <div class="w-screen max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8 relative">
     <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Agregar Post</h2>
 
@@ -9,7 +9,6 @@
       @csrf
 
       <div class="flex-grow">
-        <!-- Título -->
         <div class="mb-5">
           <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título del post</label>
           <input type="text" id="title" name="title" value="{{ old('title') }}"
@@ -17,7 +16,6 @@
             placeholder="Título" required>
         </div>
 
-        <!-- Contenido -->
         <div class="mb-5">
           <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Contenido del post</label>
           <textarea id="content" name="content" rows="5"
@@ -25,7 +23,6 @@
             placeholder="Contenido" required>{{ old('content') }}</textarea>
         </div>
 
-        <!-- Categoría -->
         <div class="mb-5 flex flex-col md:flex-row gap-6">
           <div class="w-full md:w-1/2 flex flex-col">
             <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
@@ -47,7 +44,6 @@
           </div>
         </div>
        
-        <!-- Botón de enviar -->
         <button type="submit"
           class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition duration-150">
           Subir
