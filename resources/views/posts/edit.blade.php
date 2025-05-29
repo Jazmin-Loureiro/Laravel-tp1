@@ -1,127 +1,75 @@
 @extends('layout')
 
 @section('content')
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-4"> {{-- Padding para que no quede pegado --}}
+  <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8 relative">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Editar Post</h2>
+    <form class="flex flex-col md:flex-row gap-6" action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      @method('POST')
 
-<style>
-  
-  .form {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px 25px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    transition: box-shadow 0.3s ease;
+      <div class="mb-6 flex justify-center md:justify-end items-center gap-2 md:absolute md:top-8 md:right-8 z-10">
+        <label class="switch cursor-pointer relative flex w-[6.7rem] scale-75 overflow-hidden p-2">
+          <input type="hidden" name="habilitated" value="0">
+          <input type="checkbox" name="habilitated" value="1" class="peer hidden" id="toggle_switch" {{ $post->habilitated ? 'checked' : '' }} />
+          <div class="absolute -right-[6.5rem] z-[1] flex h-12 w-24 skew-x-12 items-center justify-center text-lg duration-500 peer-checked:right-1">
+            <span class="-skew-x-12">ACTIVO</span>
+          </div>
+          <div class="z-0 h-12 w-24 -skew-x-12 border border-black duration-500 peer-checked:skew-x-12 peer-checked:bg-green-500"></div>
+           <div class="absolute left-[0.3rem] flex h-12 w-24 -skew-x-12 items-center justify-center text-lg duration-500 peer-checked:-left-[6.5rem]">
+            <span class="skew-x-12">INACTIVO</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="flex-shrink-0 w-full md:w-1/3 relative rounded-3xl shadow-2xl">
+        <label for="poster" class="cursor-pointer group block w-full h-48 md:h-full relative rounded-3xl overflow-hidden">
+          <img id="preview" src="{{ asset('storage/' . $post->poster) }}" alt="poster" class="rounded-lg shadow-md w-full h-full object-cover group-hover:opacity-75 transition" />
+          <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition rounded-lg">  
+            <span class="text-white font-semibold">Cambiar Imagen</span>
+          </div>
+        </label>
+        <input type="file" id="poster" name="poster" class="hidden" accept="image/*" onchange="previewImage(event)">
+      </div>
+
+      <div class="flex-grow">
+        <div class="mb-5">
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título del post</label>
+          <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}" class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"placeholder="Título" required></div>
+        <div class="mb-5">
+          <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Contenido del post</label>
+          <textarea id="content" name="content" rows="5" class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Contenido" required>{{ old('content', $post->content) }}</textarea>
+        </div>
+
+        <div class="mb-5">
+          <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+          <select id="category_id" name="category_id" class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"required>
+            <option value="">Selecciona una categoría</option>
+            @foreach($categories as $category)
+              <option value="{{ $category->id }}" {{ $post->category_id == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <button type="submit"class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition duration-150">
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- previsualización -->
+<script>
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const preview = document.getElementById('preview');
+      preview.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
   }
-  .form:hover {
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  }
-
-  .form-row {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-
-  .form-row label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #444;
-    user-select: none;
-  }
-
-  .form-row input[type="text"],
-  .form-row select,
-  .form-row textarea {
-    padding: 12px 15px;
-    font-size: 1rem;
-    border: 1.8px solid #ddd;
-    border-radius: 8px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    font-family: inherit;
-    resize: vertical;
-  }
-
-  .form-row input[type="text"]:focus,
-  .form-row select:focus,
-  .form-row textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-  }
-
-  .form-row textarea {
-    min-height: 130px;
-  }
-
-  .form img {
-    display: block;
-    max-width: 100%;
-    border-radius: 10px;
-    margin: 0 auto 25px auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-
-  .submit {
-    width: 100%;
-    padding: 14px 0;
-    background: #007bff;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 1.15rem;
-    font-weight: 700;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.25s ease;
-  }
-  .submit:hover {
-    background-color: #0056b3;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 35px;
-    font-weight: 700;
-    color: #222;
-    user-select: none;
-  }
-</style>
-
-<h1>Editar Post</h1>
-<form class="form" action="{{ route('posts.update', $post->id) }}" method="POST">
-    @csrf 
-    @method('POST')
-
-    <div class="form-row">
-      <label for="title">Título</label>
-      <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}" required>
-    </div>
-
-    <div class="form-row">
-      <label for="poster">Poster URL</label>
-      <input type="text" id="poster" name="poster" value="{{ old('poster', $post->poster) }}" required>
-    </div>
-
-    @if ($post->poster)
-        <img src="{{ $post->poster }}" alt="Imagen del post">
-    @endif
-
-    <div class="form-row">
-      <label for="content">Contenido</label>
-      <textarea id="content" name="content" required>{{ old('content', $post->content) }}</textarea>
-    </div>
-
-    <div class="form-row">
-      <label for="status">Estado</label>
-      <select id="habilitated" name="habilitated" required>
-        <option value="0" {{ $post->habilitated === 0 ? 'selected' : '' }}>Activo</option>
-        <option value="1" {{ $post->habilitated === 1 ? 'selected' : '' }}>Desactivado</option>
-      </select>
-
-    </div>
-
-    <button type="submit" class="submit">Actualizar</button>
-</form>
-
+</script>
 @endsection

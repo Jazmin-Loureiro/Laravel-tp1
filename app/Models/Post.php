@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['title', 'poster', 'content'];
+    protected $fillable = ['title', 'poster', 'content', 'category_id'];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class); // es un método de Laravel Eloquent que define una relación de tipo "pertenece a" entre dos modelos.
+    }
 
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -16,10 +17,10 @@ class PostController extends Controller
      /**
     * Funcion que muestra un post especifico por id
     */
-    public function show($id) {
-    $post = Post::findOrFail($id);
-    return view('posts.show', ['post' => $post]);
-    }
+  public function show($id) {
+    $post = Post::with('category')->findOrFail($id); // Utiliza with para cargar la relación category junto con el post
+    return view('posts.show', ['post' => $post]);}
+
 
      /**
      * Muestra el formulario para editar un post específico.
@@ -27,14 +28,16 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::findOrFail($id);
-        return view('posts.edit', ['post' => $post]);
+        $categories = Category::all(); // Obtener todas las categorías para el formulario
+        return view('posts.edit', ['post' => $post , 'categories' => $categories]);
     }
 
    /**
     * Muestra el formulario para crear un nuevo post.
     */
     public function create() {
-    return view('posts.create');}
+    $categories = Category::all(); 
+    return view('posts.create', compact('categories'));}
 
     /**
      * Crea un nuevo post en la base de datos.
@@ -48,6 +51,7 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'poster' => 'required|image|mimes:jpeg,png,jpg,gif',
             'content' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
         ],
         [
             'poster.required' => 'Debes subir una imagen.',
@@ -60,7 +64,9 @@ class PostController extends Controller
     $post = new Post();
     $post->title = $validated['title'];
     $post->poster = $imagePath;
+    $post->habilitated = true; 
     $post->content = $validated['content'];
+    $post->category_id = $validated['category_id'];
 
     $post->save();
 
@@ -72,18 +78,26 @@ class PostController extends Controller
     */
     public function update(Request $request, string $id) {
     $post = Post::findOrFail($id);
-
+    $habilitated = $request->boolean('habilitated'); // ← convierte 'true' o '1' a booleano real
     $validated = $request->validate([
         'title' => 'required|string|max:255',
-        'poster' => 'required|url',
+        'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         'content' => 'required|string',
-        'habilitated' => 'required|in:0,1',
+        'habilitated' => 'required|boolean',
+        'category_id' => 'required|exists:categories,id',
     ]);
 
+    if ($request->hasFile('poster')) {
+        $imagePath = $request->file('poster')->store('posters', 'public');
+        $post->poster = $imagePath;
+    }
+
+
     $post->title = $validated['title'];
-    $post->poster = $validated['poster'];
+    //$post->poster = $imagePath;
     $post->content = $validated['content'];
-    $post->habilitated = $validated['habilitated'] == '1'; // convertir a booleano
+    $post->habilitated = $habilitated;
+    $post->category_id = $validated['category_id']; 
 
     $post->save();
     return redirect()->route('posts.show', $post->id)
