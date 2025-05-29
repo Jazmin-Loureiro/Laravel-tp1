@@ -45,18 +45,14 @@ class PostController extends Controller
      * Redirige a la lista de posts con un mensaje de éxito.
      */
    public function store(Request $request)
-{
+{ 
     $validated = $request->validate(
         [
             'title' => 'required|string|max:255',
-            'poster' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'poster' => 'required',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
         ],
-        [
-            'poster.required' => 'Debes subir una imagen.',
-            'poster.image' => 'El archivo debe ser una imagen.',
-        ]
     );
 
     $imagePath = $request->file('poster')->store('posters', 'public');
@@ -81,7 +77,7 @@ class PostController extends Controller
     $habilitated = $request->boolean('habilitated'); // ← convierte 'true' o '1' a booleano real
     $validated = $request->validate([
         'title' => 'required|string|max:255',
-        'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        'poster' => 'required',
         'content' => 'required|string',
         'habilitated' => 'required|boolean',
         'category_id' => 'required|exists:categories,id',
@@ -91,10 +87,8 @@ class PostController extends Controller
         $imagePath = $request->file('poster')->store('posters', 'public');
         $post->poster = $imagePath;
     }
-
-
+    
     $post->title = $validated['title'];
-    //$post->poster = $imagePath;
     $post->content = $validated['content'];
     $post->habilitated = $habilitated;
     $post->category_id = $validated['category_id']; 
