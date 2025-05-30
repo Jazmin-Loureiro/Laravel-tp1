@@ -67,9 +67,6 @@
       <h2 class="text-base font-semibold text-gray-800">Crear un Post</h2>
       <a href="{{ route('categories.create') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">Crear una categoría</a>
   </div>
-
-<a href="{{ route('login') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">LOGIN</a>
-  
 </div>
       </nav>
 
@@ -81,7 +78,7 @@
           <span class="hidden md:group-hover:inline font-semibold">Nombre Usuario</span>
         </div>
 
-        <form method="POST" action="#">
+        <form method="POST" action="{{ route('logout') }}">
           @csrf
           <button class="flex items-center gap-4 w-full p-2 hover:bg-red-100 rounded-lg text-red-500">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
