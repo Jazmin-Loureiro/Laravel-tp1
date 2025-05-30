@@ -17,188 +17,94 @@
   $esPersonalizado = Str::startsWith($colorSeleccionado, '#');
 @endphp
 
-<style>
-  .form {
-    max-width: 500px;
-    margin: 50px auto;
-    margin-top: 10px;
-    padding: 30px 25px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  }
+<div class="flex justify-center bg-gray-100 py-10">
+  <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Agregar Categoría</h2>
 
-  .form-row {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+    {{-- Mostrar errores de validación --}}
+    @if ($errors->any())
+      <div class="mb-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        @foreach ($errors->all() as $error)
+          <div>{{ $error }}</div>
+        @endforeach
+      </div>
+    @endif
 
-  .form-row label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #444;
-  }
+    <form action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
+      @csrf
+      <div class="flex-grow">
+        {{-- Nombre --}}
+        <div class="mb-5">
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input type="text" id="name" name="name" value="{{ old('name') }}"
+                 class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                 placeholder="Nombre de la categoría" required>
+        </div>
 
-  .form-row input[type="text"],
-  .form-row textarea {
-    padding: 12px 15px;
-    font-size: 1rem;
-    border: 1.8px solid #ddd;
-    border-radius: 8px;
-    font-family: inherit;
-  }
+        {{-- Descripción --}}
+        <div class="mb-5">
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+            Descripción <span class="text-gray-400 text-xs">(máx. 255 caracteres)</span>
+          </label>
+          <textarea id="description" name="description" maxlength="255" required oninput="actualizarContador()"
+                    class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Descripción de la categoría">{{ old('description') }}</textarea>
+          <small id="contador-caracteres" class="block mt-1 text-xs text-gray-500">
+            {{ 255 - strlen(old('description')) }} caracteres restantes
+          </small>
+        </div>
 
-  .form-row textarea {
-    min-height: 130px;
-  }
+        {{-- Botón submit y volver --}}
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 mb-3">
+          Crear Categoría
+        </button>
 
-  .submit {
-    width: 100%;
-    padding: 14px 0;
-    background: #007bff;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 1.15rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
+        <a href="{{ route('categories.index') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition duration-150">
+          Volver a Categorías
+        </a>
+      </div>
 
-  .volver {
-    margin-top: 10px;
-    width: 100%;
-    padding: 14px 0;
-    background: blue;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 1.15rem;
-    font-weight: 700;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.25s ease;
-  }
+      {{-- Selector de color --}}
+<div class="flex-shrink-0 w-full md:w-1/3">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+  <div class="flex flex-wrap gap-3 justify-start">
+    @foreach ($colores as $code => $label)
+      <label class="flex flex-col items-center cursor-pointer">
+        <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
+        <div class="w-[70px] h-[70px] rounded-xl border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300" style="background-color: {{ $code }};"></div>
+        <span class="text-xs mt-1">{{ $label }}</span>
+      </label>
+    @endforeach
 
-  .submit:hover {
-    background-color: #0056b3;
-  }
-
-  .volver:hover {
-    background-color: darkblue;
-  }
-
-  .color-radio {
-    display: none;
-  }
-
-  .color-box {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    border: 2px solid #ccc;
-  }
-
-  .color-radio:checked + .color-box {
-    border: 3px solid #000;
-  }
-
-  .color-radio:checked + .color-box {
-  border: 3px solid #000;
-}
-
-.form-header {
-  max-width: 500px;
-  margin: 50px auto 10px auto; /* igual que .form */
-  text-align: center;
-}
-
-.form-header h1 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #1e293b;
-  margin-bottom: 0;
-}
-</style>
-
-<div class="form-header">
-  <h1>Agregar Categoría</h1>
+    {{-- Opción de color personalizado --}}
+    <label class="flex flex-col items-center cursor-pointer">
+      <input type="radio" class="sr-only peer" name="color"
+             value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
+             {{ $esPersonalizado ? 'checked' : '' }}
+             id="color-personalizado-radio">
+      <div class="w-[70px] h-[70px] rounded-xl overflow-hidden border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300">
+        <input type="color" id="color-personalizado-input" name="color" value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
+              class="w-full h-full border-none cursor-pointer"
+              oninput="document.getElementById('color-personalizado-radio').value = this.value"
+              onclick="document.getElementById('color-personalizado-radio').checked = true">
+      </div>
+      <span class="text-xs mt-1">Otro</span>
+    </label>
+  </div>
 </div>
 
-{{-- Mostrar errores de validación --}}
-@if ($errors->any())
-  <div style="margin-bottom: 20px; background: #ffe6e6; color: #b30000; padding: 12px 18px; border-radius: 8px; font-weight: bold; text-align: center;">
-    @foreach ($errors->all() as $error)
-      <div>{{ $error }}</div>
-    @endforeach
+    </form>
   </div>
-@endif
+</div>
 
+<script>
+  function actualizarContador() {
+    const textarea = document.getElementById('description');
+    const contador = document.getElementById('contador-caracteres');
+    const restante = 255 - textarea.value.length;
+    contador.textContent = `${restante} caracteres restantes`;
+  }
 
-<form class="form" action="{{ route('categories.store') }}" method="POST">
-  @csrf
-
-  <div class="form-row">
-    <label for="name">Nombre</label>
-    <input type="text" id="name" name="name" required value="{{ old('name') }}">
-  </div>
-
-  <div class="form-row">
-    <label for="description">Descripción</label>
-    <textarea id="description" name="description" required>{{ old('description') }}</textarea>
-  </div>
-
-  <div class="form-row">
-    <label>Color</label>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-      @foreach ($colores as $code => $label)
-        <label style="cursor: pointer; text-align: center;">
-          <input
-            type="radio"
-            class="color-radio"
-            name="color"
-            value="{{ $code }}"
-            {{ $colorSeleccionado === $code ? 'checked' : '' }}
-          >
-          <div class="color-box" style="background-color: {{ $code }};"></div>
-          <span style="font-size: 0.75rem;">{{ $label }}</span>
-        </label>
-      @endforeach
-
-      {{-- Opción de color personalizado --}}
-<label style="cursor: pointer; text-align: center;">
-  <input
-    type="radio"
-    class="color-radio"
-    name="color"
-    value="{{ $esPersonalizado ? $colorSeleccionado : '#000000' }}"
-    {{ $esPersonalizado ? 'checked' : '' }}
-    id="color-personalizado-radio"
-  >
-  <div class="color-box" style="padding: 0; overflow: hidden;">
-    <input
-      type="color"
-      id="color-personalizado-input"
-      name="color"
-      value="{{ $esPersonalizado ? $colorSeleccionado : '#000000' }}"
-      style="width: 100%; height: 100%; border: none; cursor: pointer;"
-      oninput="document.getElementById('color-personalizado-radio').value = this.value"
-      onclick="document.getElementById('color-personalizado-radio').checked = true"
-    >
-  </div>
-  <span style="font-size: 0.75rem;">Otro</span>
-</label>
-
-
-    </div>
-  </div>
-
-  <button type="submit" class="submit">Crear Categoría</button>
-  <button class="volver">
-    <a href="{{ route('categories.index') }}">
-    Volver a Categorías
-    </a>
-  </button>
-</form>
-
+  document.addEventListener('DOMContentLoaded', actualizarContador);
+</script>
 @endsection

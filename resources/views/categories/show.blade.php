@@ -29,10 +29,13 @@
   }
 
   .categoria-description {
-    color: #4b5563;
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
+  color: #4b5563;
+  margin-bottom: 24px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 
   .categoria-estado {
     font-size: 0.9rem;
