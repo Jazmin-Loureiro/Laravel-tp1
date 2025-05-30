@@ -68,6 +68,8 @@
       <a href="{{ route('categories.create') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">Crear una categoría</a>
   </div>
 
+<a href="{{ route('login') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">LOGIN</a>
+  
 </div>
       </nav>
 
