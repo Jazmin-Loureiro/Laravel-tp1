@@ -11,12 +11,20 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function getHome() {
-    $postsCount = Post::count();
-    $categoriesCount = Category::count();
-    $latestPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
-    $popularCategories = Category::withCount('posts')->orderBy('posts_count', 'desc')->take(5)->get();
+   public function getHome() {
+    $user = auth()->user();
+    $posts = $user->posts()->with('category')->get();
+    $postsCount = $posts->count();
+    $categoriesCount = $user->categories()->count();
+    $latestPosts = $user->posts()->orderBy('created_at', 'desc')->take(3)->get();
+    $popularCategories = $user->categories()
+        ->withCount('posts')
+        ->orderBy('posts_count', 'desc')
+        ->take(5)
+        ->get();
+
     return view('home', compact('postsCount', 'categoriesCount', 'latestPosts', 'popularCategories')); }
+
 
 
     /**

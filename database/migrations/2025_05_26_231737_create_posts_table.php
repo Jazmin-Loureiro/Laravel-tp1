@@ -17,9 +17,12 @@ return new class extends Migration
         $table->string('poster'); 
         $table->boolean('habilitated')->default(false); 
         $table->text('content');  
-        $table->unsignedBigInteger('category_id'); // columna para la relación
-        // Definición de la clave foránea
+        $table->unsignedBigInteger('category_id');
+        $table->unsignedBigInteger('user_id');     
+
         $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         $table->timestamps();
         });
     }

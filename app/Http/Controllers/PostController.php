@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -7,94 +8,99 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     /**
-     * Funcion que muestra la lista de posts 
+     * Mostrar lista de posts del usuario autenticado
      */
     public function index() {
-    $posts = Post::all();
-    return view('posts.index', compact('posts'));
+        $posts = auth()->user()->posts()->with('category')->get();
+        return view('posts.index', compact('posts'));
     }
 
-     /**
-    * Funcion que muestra un post especifico por id
-    */
-  public function show($id) {
-    $post = Post::with('category')->findOrFail($id); // Utiliza with para cargar la relación category junto con el post
-    return view('posts.show', ['post' => $post]);}
+    /**
+     * Mostrar post específico solo si pertenece al usuario
+     */
+    public function show($id) {
+        $post = auth()->user()->posts()->with('category')->findOrFail($id);
+        return view('posts.show', ['post' => $post]);
+    }
 
-
-     /**
-     * Muestra el formulario para editar un post específico.
+    /**
+     * Mostrar formulario para editar un post del usuario
      */
     public function edit(string $id)
     {
-        $post = Post::findOrFail($id);
-        $categories = Category::all(); // Obtener todas las categorías para el formulario
+        $post = auth()->user()->posts()->findOrFail($id);
+        $categories = auth()->user()->categories()->get();
         return view('posts.edit', ['post' => $post , 'categories' => $categories]);
     }
 
-   /**
-    * Muestra el formulario para crear un nuevo post.
-    */
-    public function create() {
-    $categories = Category::all(); 
-    return view('posts.create', compact('categories'));}
-
     /**
-     * Crea un nuevo post en la base de datos.
-     * Valida los datos del formulario y guarda el post.
-     * Redirige a la lista de posts con un mensaje de éxito.
+     * Mostrar formulario para crear post nuevo
      */
-   public function store(Request $request)
-{ 
-    $validated = $request->validate(
-        [
-            'title' => 'required|string|max:255',
-            'poster' => 'required',
-            'content' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-        ],
-    );
-
-    $imagePath = $request->file('poster')->store('posters', 'public');
-
-    $post = new Post();
-    $post->title = $validated['title'];
-    $post->poster = $imagePath;
-    $post->habilitated = true; 
-    $post->content = $validated['content'];
-    $post->category_id = $validated['category_id'];
-
-    $post->save();
-
-    return redirect()->route('posts.index')->with('success', 'Post creado correctamente');
-}
+    public function create() {
+        $categories = auth()->user()->categories()->get(); 
+        return view('posts.create', compact('categories'));
+    }
 
     /**
-    * Actualiza un post existente en la base de datos.
-    */
-    public function update(Request $request, string $id) {
-    $post = Post::findOrFail($id);
-    $habilitated = $request->boolean('habilitated'); // ← convierte 'true' o '1' a booleano real
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-        'habilitated' => 'required|boolean',
-        'category_id' => 'required|exists:categories,id',
-    ]);
+     * Guardar nuevo post relacionado al usuario autenticado
+     */
+    public function store(Request $request)
+    { 
+        $validated = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'poster' => 'required|image',
+                'content' => 'required|string',
+                'category_id' => 'required|exists:categories,id',
+            ],
+        );
 
-    if ($request->hasFile('poster')) {
+        $category = auth()->user()->categories()->findOrFail($validated['category_id']);
+
         $imagePath = $request->file('poster')->store('posters', 'public');
-        $post->poster = $imagePath;
-    }
-    
-    $post->title = $validated['title'];
-    $post->content = $validated['content'];
-    $post->habilitated = $habilitated;
-    $post->category_id = $validated['category_id']; 
 
-    $post->save();
-    return redirect()->route('posts.show', $post->id)
-                     ->with('success', 'Post actualizado correctamente');
+        $post = new Post();
+        $post->title = $validated['title'];
+        $post->poster = $imagePath;
+        $post->habilitated = true; 
+        $post->content = $validated['content'];
+        $post->category_id = $category->id;
+        $post->user_id = auth()->id();
+
+        $post->save();
+
+        return redirect()->route('posts.index')->with('success', 'Post creado correctamente');
+    }
+
+    /**
+     * Actualizar post solo si pertenece al usuario
+     */
+    public function update(Request $request, string $id) {
+        $post = auth()->user()->posts()->findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'habilitated' => 'required|boolean',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $category = auth()->user()->categories()->findOrFail($validated['category_id']);
+
+        if ($request->hasFile('poster')) {
+            $imagePath = $request->file('poster')->store('posters', 'public');
+            $post->poster = $imagePath;
+        }
+        
+        $post->title = $validated['title'];
+        $post->content = $validated['content'];
+        $post->habilitated = $validated['habilitated'];
+        $post->category_id = $category->id;
+
+        $post->save();
+
+        return redirect()->route('posts.show', $post->id)
+                         ->with('success', 'Post actualizado correctamente');
     }
 
     /**
@@ -102,6 +108,6 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       
     }
 }

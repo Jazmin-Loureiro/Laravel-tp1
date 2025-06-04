@@ -11,4 +11,10 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    // Cada categoría pertenece a un usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

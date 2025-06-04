@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = auth()->user()->categories()->get();
         return view('categories.index', compact('categories'));
     }
 
@@ -21,7 +21,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::with('posts')->findOrFail($id);
+        $category = auth()->user()->categories()->with('posts')->findOrFail($id);
         return view('categories.show', ['category' => $category]);
     }
 
@@ -30,7 +30,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = auth()->user()->categories()->findOrFail($id);
         return view('categories.edit', ['category' => $category]);
     }
 
@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
+            'name' => 'required|string|max:255|unique:categories,name,NULL,id,user_id,' . auth()->id(),
             'description' => 'required|string',
             'color' => 'required|string',
         ], [
@@ -58,8 +58,9 @@ class CategoryController extends Controller
         $category = new Category();
         $category->name = $validated['name'];
         $category->description = $validated['description'];
-        $category->habilitated = true; // Siempre se crea habilitada
-        $category->color = $validated['color']; 
+        $category->habilitated = true; 
+        $category->color = $validated['color'];
+        $category->user_id = auth()->id();
 
         $category->save();
 
@@ -71,10 +72,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $category = Category::withCount('posts')->findOrFail($id);
+        $category = auth()->user()->categories()->withCount('posts')->findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id . ',id,user_id,' . auth()->id(),
             'description' => 'required|string',
             'habilitated' => 'required|in:0,1',
             'color' => 'required|string',
@@ -86,7 +87,6 @@ class CategoryController extends Controller
         $category->description = $validated['description'];
         $category->color = $validated['color'];
 
-        // Solo se permite deshabilitar si no tiene posts
         if ($validated['habilitated'] == '0' && $category->posts_count > 0) {
             return redirect()->back()->with('error', 'No se puede deshabilitar una categoría con posts.');
         }
@@ -95,7 +95,7 @@ class CategoryController extends Controller
         $category->save();
 
         return redirect()->route('categories.show', $category->id)
-                        ->with('success', 'Categoría actualizada correctamente');
+                         ->with('success', 'Categoría actualizada correctamente');
     }
 
     /**
@@ -103,6 +103,6 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+      
     }
 }

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('habilitated')->default(false);
             $table->string('description');
             $table->string('color', 20)->default('gray');
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');            
             $table->timestamps();
         });
     }
