@@ -48,9 +48,9 @@ class PostController extends Controller
     { 
         $validated = $request->validate(
             [
-                'title' => 'required|string|max:255',
+                'title' => 'required|string|max:50',
                 'poster' => 'required|image',
-                'content' => 'required|string',
+                'content' => 'required|string|max:1500',
                 'category_id' => 'required|exists:categories,id',
             ],
         );
@@ -79,8 +79,8 @@ class PostController extends Controller
         $post = auth()->user()->posts()->findOrFail($id);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title' => 'required|string|max:50',
+            'content' => 'required|string|max:1500',
             'habilitated' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
         ]);
