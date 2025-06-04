@@ -1,100 +1,158 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
+<!-- Sidebar lateral -->
+<aside class="hidden md:flex group w-16 sm:w-20 md:w-26 md:hover:w-64 transition-all duration-300 bg-white shadow-xl flex-col sticky top-0 h-screen">
+  <div class="flex items-center justify-start h-16 border-b">
+    <span class="text-lg font-bold hidden md:group-hover:block ml-5">Usuario: {{ Auth::user()->name }}</span>
+    <span class="text-2xl md:group-hover:hidden ml-5">
+      {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+    </span>
+  </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
+  <nav class="flex-1 flex flex-col px-2 py-4 space-y-2 overflow-auto">
+    <a href="{{ route('home') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M4 12v6a2 2 0 002 2h3v-4h6v4h3a2 2 0 002-2v-6M4 12l8-8 8 8" />
+      </svg>
+      <span class="hidden md:group-hover:inline">Inicio</span>
+    </a>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+    <a href="{{ route('posts.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </svg>
+      <span class="hidden md:group-hover:inline">Posts</span>
+    </a>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+    <a href="{{ route('categories.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <span class="hidden md:group-hover:inline">Categorías</span>
+    </a>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+    <a href="{{ route('categories.create') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      <span class="hidden md:group-hover:inline">Añadir Categoría</span>
+    </a>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+    <!-- Crear post expandido -->
+    <div class="flex flex-col h-full">
+      <a href="{{ route('posts.create') }}" title="Crear un Post" class="flex items-center p-1 rounded-full stroke-blue-600 fill-none md:group-hover:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke-width="1.5" />
+          <path d="M8 12H16" stroke-width="1.5" />
+          <path d="M12 16V8" stroke-width="1.5" />
+        </svg>
+      </a>
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
+      <div class="hidden md:group-hover:flex flex-col items-center text-center bg-gray-100 m-1 rounded-2xl shadow-lg p-4 mt-auto">
+        <a href="{{ route('posts.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" class="stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
+            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
+            <path d="M8 12H16" stroke-width="1.5"></path>
+            <path d="M12 16V8" stroke-width="1.5"></path>
+          </svg>
+        </a>
+        <h2 class="text-base font-semibold text-gray-800">Crear un Post</h2>
+        <a href="{{ route('categories.create') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">Crear una categoría</a>
+      </div>
+    </div>
+  </nav>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+  <div class="mt-auto px-2 py-4 space-y-2 border-t flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <a href="{{ route('profile.edit') }}" class="flex items-center p-2 rounded-lg hover:bg-blue-200 text-gray-800 font-semibold w-full">
+        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 20v-1a4 4 0 014-4h4a4 4 0 014 4v1" />
+          </svg>
         </div>
+        <span class="hidden md:group-hover:inline ml-2 truncate">Editar perfil</span>
+      </a>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+    <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button class="flex items-center gap-4 w-full p-2 hover:bg-red-100 rounded-lg text-red-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+        </svg>
+        <span class="hidden md:group-hover:inline">Cerrar sesión</span>
+      </button>
+    </form>
+  </div>
+</aside>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+<!-- Menú inferior móvil -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md flex justify-around items-center h-14 md:hidden z-40">
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+  <a href="{{ route('home') }}" class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12v6a2 2 0 002 2h3v-4h6v4h3a2 2 0 002-2v-6M4 12l8-8 8 8" />
+    </svg>
+    Inicio
+  </a>
 
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+  <a href="{{ route('posts.index') }}" class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+    </svg>
+    Posts
+  </a>
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+  <!-- Botón Crear con menú desplegable usando Alpine.js -->
+  <div x-data="{ open: false }" class="relative">
+    <button 
+      @click="open = !open"
+      class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600 focus:outline-none"
+      aria-expanded="false"
+      aria-controls="crearMenu"
+    >
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke-width="1.5" />
+        <path d="M8 12H16" stroke-width="1.5" />
+        <path d="M12 16V8" stroke-width="1.5" />
+      </svg>
+      Crear
+    </button>
+
+    <div 
+      x-show="open" 
+      @click.outside="open = false"
+      x-transition
+      id="crearMenu"
+      class="absolute bottom-14 left-1/2 transform -translate-x-1/2 bg-white border rounded-lg shadow-lg w-40 text-center py-2"
+      style="display: none;"
+    >
+      <a href="{{ route('posts.create') }}" class="block px-4 py-2 hover:bg-blue-100 text-gray-700">Crear Post</a>
+      <a href="{{ route('categories.create') }}" class="block px-4 py-2 hover:bg-blue-100 text-gray-700">Crear Categoría</a>
     </div>
-</nav>
+  </div>
+
+  <a href="{{ route('categories.index') }}" class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    Categorías
+  </a>
+
+  <a href="{{ route('profile.edit') }}" class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 20v-1a4 4 0 014-4h4a4 4 0 014 4v1" />
+    </svg>
+    Perfil
+  </a>
+
+  <form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button type="submit" class="flex flex-col items-center text-xs text-red-500 hover:text-red-700 px-1">
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+      </svg>
+      Salir
+    </button>
+  </form>
+</div>

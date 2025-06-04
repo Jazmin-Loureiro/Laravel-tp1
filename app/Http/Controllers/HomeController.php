@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Post;
+use App\Models\Category;
 
 use Illuminate\Http\Request;
 
@@ -9,10 +11,13 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function getHome()
-    {
-        return view('home');
-    }
+public function getHome() {
+    $postsCount = Post::count();
+    $categoriesCount = Category::count();
+    $latestPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
+    $popularCategories = Category::withCount('posts')->orderBy('posts_count', 'desc')->take(5)->get();
+    return view('home', compact('postsCount', 'categoriesCount', 'latestPosts', 'popularCategories')); }
+
 
     /**
      * Show the form for creating a new resource.

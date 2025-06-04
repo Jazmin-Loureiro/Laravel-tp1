@@ -33,7 +33,7 @@
         <!-- Forgot Password -->
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100" href="{{ route('password.request') }}">
+                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-gray-100" href="{{ route('password.request') }}">
                     {{ __('¿Olvidaste tu contraseña?') }}
                 </a>
             @endif
@@ -45,6 +45,7 @@
                 {{ __('Iniciar sesión') }}
             </x-primary-button>
         </div>
+        
 
         <!-- Register Link -->
         <div class="text-center mt-6">

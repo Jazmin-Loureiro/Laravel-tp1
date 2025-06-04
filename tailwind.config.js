@@ -1,5 +1,7 @@
 // tailwind.config.js
 export default {
+  darkMode: 'class', // 👈 AÑADÍ esta línea para sacar el darkmode
+
   content: [
     './resources/**/*.blade.php',
     './resources/**/*.js',
