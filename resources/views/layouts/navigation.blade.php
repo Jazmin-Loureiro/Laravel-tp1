@@ -8,43 +8,62 @@
   </div>
 
   <nav class="flex-1 flex flex-col px-2 py-4 space-y-2 overflow-auto">
-    <a href="{{ route('home') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+    <a href="{{ route('home') }}" class="flex items-center md:group-hover:flex-row flex-col justify-center md:justify-start p-2 rounded-lg hover:bg-gray-200 transition-all">
       <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"d="M4 12v6a2 2 0 002 2h3v-4h6v4h3a2 2 0 002-2v-6M4 12l8-8 8 8" />
       </svg>
-      <span class="hidden md:group-hover:inline">Inicio</span>
+      <span class="hidden md:group-hover:inline-block ml-4">Inicio</span>
     </a>
 
-    <a href="{{ route('posts.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
+    <a href="{{ route('posts.index') }}" class="flex items-center md:group-hover:flex-row flex-col justify-center md:justify-start p-2 rounded-lg hover:bg-gray-200 transition-all">
       <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
       </svg>
-      <span class="hidden md:group-hover:inline">Posts</span>
+      <span class="hidden md:group-hover:inline-block ml-4">Posts</span>
     </a>
 
-    <a href="{{ route('categories.index') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
-      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    <a href="{{ route('categories.index') }}" class="flex items-center md:group-hover:flex-row flex-col justify-center md:justify-start p-2 rounded-lg hover:bg-gray-200 transition-all">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
       </svg>
-      <span class="hidden md:group-hover:inline">Categorías</span>
+      <span class="hidden md:group-hover:inline-block ml-4">Categorías</span>
     </a>
 
-    <a href="{{ route('categories.create') }}" class="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-200">
-      <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg>
-      <span class="hidden md:group-hover:inline">Añadir Categoría</span>
-    </a>
-
-    <!-- Crear post expandido -->
     <div class="flex flex-col h-full">
-      <a href="{{ route('posts.create') }}" title="Crear un Post" class="flex items-center p-1 rounded-full stroke-blue-600 fill-none md:group-hover:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" stroke-width="1.5" />
-          <path d="M8 12H16" stroke-width="1.5" />
-          <path d="M12 16V8" stroke-width="1.5" />
-        </svg>
-      </a>
+      <!-- Botones colapsados: Crear Categoría y Crear Post -->
+      <div class="flex flex-col items-center gap-2 md:group-hover:hidden">
+        {{-- Crear Categoría --}}
+        <a href="{{ route('categories.create') }}" title="Crear una Categoría" class="flex items-center justify-center w-full p-1 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+              class="text-blue-600 fill-none">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+          </svg>
+        </a>
+
+        {{-- Crear Post --}}
+        <a href="{{ route('posts.create') }}" title="Crear un Post"
+          class="flex items-center justify-center w-full p-1 rounded-full stroke-blue-600 fill-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="1.5" />
+            <path d="M8 12H16" stroke-width="1.5" />
+            <path d="M12 16V8" stroke-width="1.5" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="hidden md:group-hover:flex flex-col items-center text-center bg-gray-100 m-1 rounded-2xl shadow-lg p-4 mt-auto">
+        <a href="{{ route('categories.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="w-full h-full stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+          </svg>
+        </a>
+        <h2 class="text-base font-semibold text-gray-800">Crear una Categoría</h2>
+      </div>
 
       <div class="hidden md:group-hover:flex flex-col items-center text-center bg-gray-100 m-1 rounded-2xl shadow-lg p-4 mt-auto">
         <a href="{{ route('posts.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
@@ -55,7 +74,6 @@
           </svg>
         </a>
         <h2 class="text-base font-semibold text-gray-800">Crear un Post</h2>
-        <a href="{{ route('categories.create') }}" class="mt-1 text-sm text-gray-400 hover:text-blue-600">Crear una categoría</a>
       </div>
     </div>
   </nav>
@@ -132,8 +150,8 @@
   </div>
 
   <a href="{{ route('categories.index') }}" class="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mb-1">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
     </svg>
     Categorías
   </a>

@@ -1,110 +1,110 @@
-@extends('layout')
+<x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+      {{ __('Agregar Categoría') }}
+    </h2>
+  </x-slot>
 
-@section('content')
+  @php
+    $colores = [
+      'red' => 'Rojo', 'orange' => 'Naranja', 'yellow' => 'Amarillo',
+      'green' => 'Verde', 'blue' => 'Azul', 'purple' => 'Violeta',
+      'pink' => 'Rosa', 'black' => 'Negro', 'brown' => 'Marrón',
+    ];
 
-@php
-  $colores = [
-    'red' => 'Rojo', 'orange' => 'Naranja', 'yellow' => 'Amarillo',
-    'green' => 'Verde', 'blue' => 'Azul', 'purple' => 'Violeta',
-    'pink' => 'Rosa', 'black' => 'Negro', 'brown' => 'Marrón',
-  ];
+    $colorSeleccionado = old('color');
+    if (strtolower($colorSeleccionado) === 'white' || strtolower($colorSeleccionado) === '#ffffff') {
+      $colorSeleccionado = null;
+    }
 
-  $colorSeleccionado = old('color');
-  if (strtolower($colorSeleccionado) === 'white' || strtolower($colorSeleccionado) === '#ffffff') {
-    $colorSeleccionado = null;
-  }
+    $esPersonalizado = Str::startsWith($colorSeleccionado, '#');
+  @endphp
 
-  $esPersonalizado = Str::startsWith($colorSeleccionado, '#');
-@endphp
+  <div class="flex justify-center bg-gray-100 py-10">
+    <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8">
+      {{-- Mostrar errores de validación --}}
+      @if ($errors->any())
+        <div class="mb-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+          @endforeach
+        </div>
+      @endif
 
-<div class="flex justify-center bg-gray-100 py-10">
-  <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8">
-    <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Agregar Categoría</h2>
+      <form action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
+        @csrf
+        <div class="flex-grow">
+          {{-- Nombre --}}
+          <div class="mb-5">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <input type="text" id="name" name="name" value="{{ old('name') }}"
+                   class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                   placeholder="Nombre de la categoría" required>
+          </div>
 
-    {{-- Mostrar errores de validación --}}
-    @if ($errors->any())
-      <div class="mb-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        @foreach ($errors->all() as $error)
-          <div>{{ $error }}</div>
-        @endforeach
-      </div>
-    @endif
+          {{-- Descripción --}}
+          <div class="mb-5">
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+              Descripción <span class="text-gray-400 text-xs">(máx. 255 caracteres)</span>
+            </label>
+            <textarea id="description" name="description" maxlength="255" required oninput="actualizarContador()"
+                      class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="Descripción de la categoría">{{ old('description') }}</textarea>
+            <small id="contador-caracteres" class="block mt-1 text-xs text-gray-500">
+              {{ 255 - strlen(old('description')) }} caracteres restantes
+            </small>
+          </div>
 
-    <form action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
-      @csrf
-      <div class="flex-grow">
-        {{-- Nombre --}}
-        <div class="mb-5">
-          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-          <input type="text" id="name" name="name" value="{{ old('name') }}"
-                 class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                 placeholder="Nombre de la categoría" required>
+          {{-- Botón submit y volver --}}
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 mb-3">
+            Crear Categoría
+          </button>
+
+          <a href="{{ route('categories.index') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition duration-150">
+            Volver a Categorías
+          </a>
         </div>
 
-        {{-- Descripción --}}
-        <div class="mb-5">
-          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-            Descripción <span class="text-gray-400 text-xs">(máx. 255 caracteres)</span>
-          </label>
-          <textarea id="description" name="description" maxlength="255" required oninput="actualizarContador()"
-                    class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Descripción de la categoría">{{ old('description') }}</textarea>
-          <small id="contador-caracteres" class="block mt-1 text-xs text-gray-500">
-            {{ 255 - strlen(old('description')) }} caracteres restantes
-          </small>
+        {{-- Selector de color --}}
+        <div class="flex-shrink-0 w-full md:w-1/3">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+          <div class="flex flex-wrap gap-3 justify-start">
+            @foreach ($colores as $code => $label)
+              <label class="flex flex-col items-center cursor-pointer">
+                <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
+                <div class="w-[70px] h-[70px] rounded-xl border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300" style="background-color: {{ $code }};"></div>
+                <span class="text-xs mt-1">{{ $label }}</span>
+              </label>
+            @endforeach
+
+            {{-- Opción de color personalizado --}}
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" class="sr-only peer" name="color"
+                     value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
+                     {{ $esPersonalizado ? 'checked' : '' }}
+                     id="color-personalizado-radio">
+              <div class="w-[70px] h-[70px] rounded-xl overflow-hidden border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300">
+                <input type="color" id="color-personalizado-input" name="color" value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
+                      class="w-full h-full border-none cursor-pointer"
+                      oninput="document.getElementById('color-personalizado-radio').value = this.value"
+                      onclick="document.getElementById('color-personalizado-radio').checked = true">
+              </div>
+              <span class="text-xs mt-1">Otro</span>
+            </label>
+          </div>
         </div>
-
-        {{-- Botón submit y volver --}}
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 mb-3">
-          Crear Categoría
-        </button>
-
-        <a href="{{ route('categories.index') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition duration-150">
-          Volver a Categorías
-        </a>
-      </div>
-
-      {{-- Selector de color --}}
-<div class="flex-shrink-0 w-full md:w-1/3">
-  <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-  <div class="flex flex-wrap gap-3 justify-start">
-    @foreach ($colores as $code => $label)
-      <label class="flex flex-col items-center cursor-pointer">
-        <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
-        <div class="w-[70px] h-[70px] rounded-xl border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300" style="background-color: {{ $code }};"></div>
-        <span class="text-xs mt-1">{{ $label }}</span>
-      </label>
-    @endforeach
-
-    {{-- Opción de color personalizado --}}
-    <label class="flex flex-col items-center cursor-pointer">
-      <input type="radio" class="sr-only peer" name="color"
-             value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
-             {{ $esPersonalizado ? 'checked' : '' }}
-             id="color-personalizado-radio">
-      <div class="w-[70px] h-[70px] rounded-xl overflow-hidden border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300">
-        <input type="color" id="color-personalizado-input" name="color" value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
-              class="w-full h-full border-none cursor-pointer"
-              oninput="document.getElementById('color-personalizado-radio').value = this.value"
-              onclick="document.getElementById('color-personalizado-radio').checked = true">
-      </div>
-      <span class="text-xs mt-1">Otro</span>
-    </label>
+      </form>
+    </div>
   </div>
-</div>
 
-    </form>
-  </div>
-</div>
+  <script>
+    function actualizarContador() {
+      const textarea = document.getElementById('description');
+      const contador = document.getElementById('contador-caracteres');
+      const restante = 255 - textarea.value.length;
+      contador.textContent = `${restante} caracteres restantes`;
+    }
 
-<script>
-  function actualizarContador() {
-    const textarea = document.getElementById('description');
-    const contador = document.getElementById('contador-caracteres');
-    const restante = 255 - textarea.value.length;
-    contador.textContent = `${restante} caracteres restantes`;
-  }
-
-  document.addEventListener('DOMContentLoaded', actualizarContador);
-</script>
-@endsection
+    document.addEventListener('DOMContentLoaded', actualizarContador);
+  </script>
+</x-app-layout>
