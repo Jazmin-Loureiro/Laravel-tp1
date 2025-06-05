@@ -19,11 +19,9 @@
           {{ $category->habilitated ? 'Habilitada' : 'Deshabilitada' }}
         </p>
 
-        <a href="{{ route('categories.edit', $category->id) }}"
-           class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg mb-6 transition">
+        <a href="{{ route('categories.edit', $category->id) }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 mb-6">
           Editar Categoría
         </a>
-
         <div class="bg-gray-50 px-6 py-6 border-t border-gray-200 mt-6">
           <h3 class="text-xl font-semibold text-gray-900 mb-4">Posts de esta categoría</h3>
 
@@ -45,10 +43,9 @@
         </div>
 
         <div class="px-6 py-6">
-          <a href="{{ route('categories.index') }}"
-             class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg transition">
-            ← Volver a Categorías
-          </a>
+          <a href="{{ route('categories.index') }}" class="text-sm text-blue-600 hover:underline">
+          ← Vovelr a Categorías
+        </a>
         </div>
       </div>
 
