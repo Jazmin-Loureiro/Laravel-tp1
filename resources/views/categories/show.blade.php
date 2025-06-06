@@ -5,7 +5,7 @@
     </h2>
   </x-slot>
 
-  <div class="bg-gray-100  px-4 sm:px-6 overflow-x-hidden min-h-screen">
+  <div class="bg-gray-100 sm:px-6 overflow-x-hidden min-h-full mb-5">
     <div class="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-full mx-auto">
       <div class="h-2 rounded-t-lg" style="background-color: {{ $category->color ?? '#7c3aed' }}"></div>
       <div class="p-6">
@@ -17,7 +17,7 @@
             {{ $category->habilitated ? 'Habilitada' : 'Deshabilitada' }}
           </p>
         </div>
-        <p class="text-gray-600 leading-relaxed mb-6 break-words break-all whitespace-pre-wrap max-w-full">
+        <p class="text-gray-600 leading-relaxed mb-6 break-words break-all max-w-full">
          {{ $category->description }}
         </p>
         <div class="flex justify-end mb-6">
@@ -55,11 +55,10 @@
             </a>
           @endif
         </div>
-        <div class="mt-6 flex justify-end">
-          <a href="{{ route('categories.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-full transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 whitespace-nowrap">
-            ← Volver a Categorías
-          </a>
-        </div>
+        <div class="mt-2 flex justify-end">
+          <a href="{{ route('categories.index') }}" class="text-sm text-blue-600 hover:underline">
+          ← Volver a Categorías
+          </a>       
       </div>
     </div>
   </div>

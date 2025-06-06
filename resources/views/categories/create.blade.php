@@ -20,7 +20,7 @@
     $esPersonalizado = Str::startsWith($colorSeleccionado, '#');
   @endphp
 
-  <div class="flex justify-center bg-gray-100 ">
+  <div class="flex justify-center bg-gray-100 mb-5">
     <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8">
       {{-- Mostrar errores de validación --}}
       @if ($errors->any())
@@ -33,55 +33,62 @@
 
       <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
         @csrf
-        <div class="flex-grow">
-          {{-- Nombre --}}
-          <div class="mb-5">
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-            <input type="text" id="name" name="name" value="{{ old('name') }}"
-                   class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                   placeholder="Nombre de la categoría" required>
-          </div>
 
-          {{-- Descripción --}}
-          <div class="mb-5">
-            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-              Descripción <span class="text-gray-400 text-xs">(máx. 255 caracteres)</span>
-            </label>
-            <textarea id="description" name="description" maxlength="255" rows="7" required oninput="actualizarContador()"
-                      class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      placeholder="Descripción de la categoría">{{ old('description') }}</textarea>
-            <small id="contador-caracteres" class="block mt-1 text-xs text-gray-500">
-              {{ 255 - strlen(old('description')) }} caracteres restantes
-            </small>
-          </div>
-        </div>
+        <div class="w-full flex flex-col md:flex-row gap-6">
+          {{-- Columna izquierda: Nombre y Descripción --}}
+          <div class="w-full md:w-1/2">
+            {{-- Nombre --}}
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <input type="text" id="name" name="name" maxlength="40" value="{{ old('name') }}"
+                class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required>
+            </div>
 
-        {{-- Selector de color --}}
-        <div class="flex-shrink-0 w-full md:w-1/3">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-          <div class="flex flex-wrap gap-3 justify-center">
-            @foreach ($colores as $code => $label)
-              <label class="flex flex-col items-center cursor-pointer">
-                <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
-                <div class="w-[70px] h-[70px] rounded-xl border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300" style="background-color: {{ $code }};"></div>
-                <span class="text-xs mt-1">{{ $label }}</span>
+            {{-- Descripción --}}
+            <div class="mb-1">
+              <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                Descripción 
+                <span class="text-gray-500 text-xs">(máx. 255 caracteres)</span>
               </label>
-            @endforeach
+              <textarea id="description" name="description" maxlength="255" rows="3" oninput="actualizarContador()"
+                class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required>{{ old('description') }}</textarea>
+              <small id="contador-caracteres" class="text-gray-500 text-xs">
+                {{ 255 - strlen(old('description')) }} caracteres restantes
+              </small>
+            </div>
+          </div>
 
-            {{-- Opción de color personalizado --}}
-            <label class="flex flex-col items-center  cursor-pointer">
-              <input type="radio" class="sr-only peer" name="color"
-                     value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
-                     {{ $esPersonalizado ? 'checked' : '' }}
-                     id="color-personalizado-radio">
-              <div class="w-[70px] h-[70px] rounded-xl overflow-hidden border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300">
-                <input type="color" id="color-personalizado-input" name="color" value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
-                      class="w-full h-full border-none cursor-pointer"
-                      oninput="document.getElementById('color-personalizado-radio').value = this.value"
-                      onclick="document.getElementById('color-personalizado-radio').checked = true">
-              </div>
-              <span class="text-xs mt-1">Otro</span>
-            </label>
+          {{-- Columna derecha: Selector de color --}}
+          <div class="w-full md:w-1/2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+            <div class="flex flex-wrap gap-3 justify-center sm:justify-start">
+              {{-- Colores predefinidos --}}
+              @foreach ($colores as $code => $label)
+                <label class="flex flex-col items-center cursor-pointer">
+                  <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
+                  <div class="w-[70px] h-[70px] rounded-xl border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300" style="background-color: {{ $code }};"></div>
+                  <span class="text-xs mt-1">{{ $label }}</span>
+                </label>
+              @endforeach
+
+              {{-- Opción de color personalizado --}}
+              <label class="flex flex-col items-center cursor-pointer">
+                <input type="radio" class="sr-only peer" name="color"
+                  value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
+                  {{ $esPersonalizado ? 'checked' : '' }}
+                  id="color-personalizado-radio">
+                <div class="w-[70px] h-[70px] rounded-xl overflow-hidden border-2 peer-checked:border-black peer-checked:shadow-md border-gray-300">
+                  <input type="color" id="color-personalizado-input"
+                    value="{{ $esPersonalizado ? $colorSeleccionado : '#000000' }}"
+                    class="w-full h-full border-none cursor-pointer"
+                    oninput="document.getElementById('color-personalizado-radio').value = this.value"
+                    onclick="document.getElementById('color-personalizado-radio').checked = true">
+                </div>
+                <span class="text-xs mt-1">Otro</span>
+              </label>
+            </div>
           </div>
         </div>
       </form>

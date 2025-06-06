@@ -7,22 +7,28 @@
 
   <div class="overflow-x-hidden pb-5">
     <div class="space-y-4 sm:px-6 lg:px-8">
-      <a href="{{ route('categories.create') }}" class="flex flex-col justify-center items-center rounded-xl border-gray-300 bg-white text-gray-400 hover:border-blue-500 transition-all duration-300 px-0 sm:px-4 max-w-[1200px] mx-auto w-full sm:flex-row shadow-sm hover:shadow-lg p-4 cursor-pointer group border-2 border-dashed">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-100 text-gray-400 group-hover:text-blue-500 text-2xl font-bold shrink-0 mb-3 sm:mb-0 sm:mr-4 transition-colors">
-            +
-        </div>
-        <div class="flex-grow text-center sm:text-left">
-            <p class="font-semibold text-gray-500 group-hover:text-blue-500 transition-colors text-base">
-                Crear nueva categoría
-            </p>
-            <p class="text-sm text-gray-400 group-hover:text-gray-600 transition-colors">
-               Organizá tus ideas con nuevas categorías 
-            </p>
-        </div>
-      </a>
+    {{-- Bloque para crear nueva categoría --}}
+    <a href="{{ route('categories.create') }}" class="group">
+  <div class="flex items-center justify-center bg-white w-full rounded-xl p-4 shadow-sm hover:shadow-lg border-2 border-dashed border-gray-300 text-gray-400 group-hover:border-blue-500 group-hover:text-blue-600 transition-all duration-300 cursor-pointer">
+
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center transition-colors duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="text-gray-400 group-hover:text-blue-600 fill-none transition-colors duration-300">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+        </svg>
+      </div>
+      <div class="text-base font-semibold transition-colors duration-300">
+        Agregar nueva categoría
+      </div>
+    </div>
+  </div>
+</a>
 
       @foreach ($categories as $category)
-        <div class="px-0 sm:px-4 max-w-[1200px] mx-auto w-full flex flex-col sm:flex-row items-center bg-white rounded-xl p-4 shadow-md transition-transform duration-200 hover:shadow-lg {{ !$category->habilitated ? 'grayscale opacity-60' : '' }}">
+        <div class="px-0 sm:px-4  mx-auto w-full flex flex-col sm:flex-row items-center bg-white rounded-xl p-4 shadow-md transition-transform duration-200 hover:shadow-lg {{ !$category->habilitated ? 'grayscale opacity-60' : '' }}">
           <div class="w-12 h-12 rounded-lg shrink-0 mb-3 sm:mb-0 sm:mr-4" style="background-color: {{ $category->color ?? '#7c3aed' }};"></div>
           <div class="flex-grow min-w-0 text-center sm:text-left">
             <p class="font-bold text-gray-800 text-base mb-1 truncate">
