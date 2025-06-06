@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logo_UNCo.svg/2560px-Logo_UNCo.svg.png" alt="UNCo Logo" width="180">
+  <img src="https://uncoma.edu.ar/wp-content/uploads/2024/09/LOGOUNC-e1522858761795.png" alt="UNCo Logo" width="180">
 </p>
 
 <h2 align="center"><strong>Tecnicatura Universitaria en Desarrollo Web</strong></h2>
