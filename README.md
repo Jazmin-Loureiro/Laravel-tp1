@@ -117,6 +117,9 @@ Esto genera rutas, controladores y vistas para login, registro y manejo de sesio
 
 ## 🖼️ Capturas de Pantalla
 
+### Página de Login
+![Inicio](readme-img/login.png)
+
 ### Página de Inicio
 ![Inicio](readme-img/home.png)
 
