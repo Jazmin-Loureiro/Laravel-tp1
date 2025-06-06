@@ -53,29 +53,30 @@
         </a>
       </div>
 
-      <div class="hidden md:group-hover:flex flex-col items-center text-center bg-gray-100 m-1 rounded-2xl shadow-lg p-4 mt-auto">
-        <a href="{{ route('categories.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              class="w-full h-full stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
-          </svg>
-        </a>
-        <h2 class="text-base font-semibold text-gray-800">Crear una Categoría</h2>
-      </div>
+      <div class="hidden md:group-hover:flex flex-col items-center text-center gap-4 mt-auto px-2">
+        <div class="bg-gray-100 rounded-2xl shadow-lg p-4 w-full flex flex-col items-center">
+          <a href="{{ route('categories.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-full h-full stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+            </svg>
+          </a>
+          <h2 class="text-base font-semibold text-gray-800">Crear una Categoría</h2>
+        </div>
 
-      <div class="hidden md:group-hover:flex flex-col items-center text-center bg-gray-100 m-1 rounded-2xl shadow-lg p-4 mt-auto">
-        <a href="{{ route('posts.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" class="stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
-            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
-            <path d="M8 12H16" stroke-width="1.5"></path>
-            <path d="M12 16V8" stroke-width="1.5"></path>
-          </svg>
-        </a>
-        <h2 class="text-base font-semibold text-gray-800">Crear un Post</h2>
+        <div class="bg-gray-100 rounded-2xl shadow-lg p-4 w-full flex flex-col items-center">
+          <a href="{{ route('posts.create') }}" class="group mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 transition-colors duration-100 outline-none cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" class="stroke-blue-400 fill-none hover:fill-blue-800 active:stroke-blue-200 active:fill-blue-600 active:duration-0 duration-300">
+              <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>
+              <path d="M8 12H16" stroke-width="1.5"></path>
+              <path d="M12 16V8" stroke-width="1.5"></path>
+            </svg>
+          </a>
+          <h2 class="text-base font-semibold text-gray-800">Crear un Post</h2>
+        </div>
       </div>
-    </div>
   </nav>
 
   <div class="mt-auto px-2 py-4 space-y-2 border-t flex-shrink-0">
