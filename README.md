@@ -1,14 +1,19 @@
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logo_UNCo.svg/2560px-Logo_UNCo.svg.png" alt="UNCo Logo" width="180">
+</p>
 
-<p align="center"><strong>Tecnicatura Universitaria en Desarrollo Web</strong><br>
-Facultad de Informática<br>
-Universidad Nacional del Comahue<br>
-<b>Programación Web Avanzada</b></p>
+<h2 align="center"><strong>Tecnicatura Universitaria en Desarrollo Web</strong></h2>
+<h3 align="center">Facultad de Informática – Universidad Nacional del Comahue</h3>
+<h4 align="center"><i>Programación Web Avanzada</i></h4>
+
+<br>
 
 <p align="center">
-<strong>Integrantes</strong><br>
-Jazmín Loureiro - FAI-4228<br>
-Ailen Agustina Flores Montes - FAI-3547
+  <strong>Integrantes</strong><br>
+  Jazmín Loureiro – <i>FAI-4228</i><br>
+  Ailen Agustina Flores Montes – <i>FAI-3547</i>
 </p>
+
 
 <p align="center">
   <a href="https://laravel.com" target="_blank">
@@ -111,4 +116,21 @@ Esto genera rutas, controladores y vistas para login, registro y manejo de sesio
 - Middleware `auth` para proteger rutas privadas
 
 ## 🖼️ Capturas de Pantalla
+
+### Página de Inicio
+![Inicio](readme-img/home.png)
+
+### Detalles 
+![Detalles](readme-img/detallesPost.png)
+
+### Categorias 
+![Categorias](readme-img/categories.png)
+
+### Editar Post 
+![Editar Post](readme-img/editPost.png)
+
+
+
+
+
 
