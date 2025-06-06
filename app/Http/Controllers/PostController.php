@@ -49,7 +49,7 @@ class PostController extends Controller
         $validated = $request->validate(
             [
                 'title' => 'required|string|max:50',
-                'poster' => 'required|image',
+                'poster' => 'required',
                 'content' => 'required|string|max:1500',
                 'category_id' => 'required|exists:categories,id',
             ],

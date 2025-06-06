@@ -20,7 +20,7 @@
     $esPersonalizado = Str::startsWith($colorSeleccionado, '#');
   @endphp
 
-  <div class="flex justify-center bg-gray-100 py-10">
+  <div class="flex justify-center bg-gray-100 ">
     <div class="w-full max-w-6xl bg-white rounded-lg shadow-md p-6 md:p-8">
       {{-- Mostrar errores de validación --}}
       @if ($errors->any())
@@ -31,7 +31,7 @@
         </div>
       @endif
 
-      <form action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
+      <form id="category-form" action="{{ route('categories.store') }}" method="POST" class="flex flex-col md:flex-row gap-6">
         @csrf
         <div class="flex-grow">
           {{-- Nombre --}}
@@ -47,28 +47,19 @@
             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
               Descripción <span class="text-gray-400 text-xs">(máx. 255 caracteres)</span>
             </label>
-            <textarea id="description" name="description" maxlength="255" required oninput="actualizarContador()"
+            <textarea id="description" name="description" maxlength="255" rows="7" required oninput="actualizarContador()"
                       class="w-full p-3 bg-gray-100 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       placeholder="Descripción de la categoría">{{ old('description') }}</textarea>
             <small id="contador-caracteres" class="block mt-1 text-xs text-gray-500">
               {{ 255 - strlen(old('description')) }} caracteres restantes
             </small>
           </div>
-
-          {{-- Botón submit y volver --}}
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 mb-3">
-            Crear Categoría
-          </button>
-
-          <a href="{{ route('categories.index') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-full transition duration-150">
-            Volver a Categorías
-          </a>
         </div>
 
         {{-- Selector de color --}}
         <div class="flex-shrink-0 w-full md:w-1/3">
           <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-          <div class="flex flex-wrap gap-3 justify-start">
+          <div class="flex flex-wrap gap-3 justify-center">
             @foreach ($colores as $code => $label)
               <label class="flex flex-col items-center cursor-pointer">
                 <input type="radio" class="sr-only peer" name="color" value="{{ $code }}" {{ $colorSeleccionado === $code ? 'checked' : '' }} required>
@@ -78,7 +69,7 @@
             @endforeach
 
             {{-- Opción de color personalizado --}}
-            <label class="flex flex-col items-center cursor-pointer">
+            <label class="flex flex-col items-center  cursor-pointer">
               <input type="radio" class="sr-only peer" name="color"
                      value="{{ $esPersonalizado ? $colorSeleccionado : '' }}"
                      {{ $esPersonalizado ? 'checked' : '' }}
@@ -94,6 +85,17 @@
           </div>
         </div>
       </form>
+
+      <div class="flex justify-between items-center mt-6">
+        <a href="{{ route('categories.index') }}" class="text-sm text-blue-600 hover:underline">
+          ← Volver
+        </a>
+
+        <button type="submit" form="category-form"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 whitespace-nowrap">
+          Crear Categoría
+        </button>
+      </div>
     </div>
   </div>
 

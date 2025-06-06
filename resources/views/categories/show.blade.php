@@ -5,53 +5,62 @@
     </h2>
   </x-slot>
 
-  <div class="w-full px-4 sm:px-6 lg:px-8 py-10 bg-gray-100">
-    <div class="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-full sm:w-[1100px] mx-auto flex flex-col justify-between">
-
-      {{-- Línea con bordes redondeados arriba (lo que te gustaba) --}}
+  <div class="bg-gray-100  px-4 sm:px-6 overflow-x-hidden min-h-screen">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-full mx-auto">
       <div class="h-2 rounded-t-lg" style="background-color: {{ $category->color ?? '#7c3aed' }}"></div>
-
-      <div class="p-6 font-[Inter]">
-        <h2 class="text-3xl font-bold text-gray-800 mb-3">{{ $category->name }}</h2>
-        <p class="text-gray-600 leading-relaxed mb-6 break-words">{{ $category->description }}</p>
-
-        <p class="text-sm font-semibold mb-6" style="color: {{ $category->habilitated ? '#16a34a' : '#dc2626' }};">
-          {{ $category->habilitated ? 'Habilitada' : 'Deshabilitada' }}
+      <div class="p-6">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 break-words w-full sm:w-auto min-w-0">
+            {{ $category->name }}
+          </h2>
+          <p class="text-sm font-semibold whitespace-nowrap" style="color: {{ $category->habilitated ? '#16a34a' : '#dc2626' }};">
+            {{ $category->habilitated ? 'Habilitada' : 'Deshabilitada' }}
+          </p>
+        </div>
+        <p class="text-gray-600 leading-relaxed mb-6 break-words break-all whitespace-pre-wrap max-w-full">
+         {{ $category->description }}
         </p>
-
-        <a href="{{ route('categories.edit', $category->id) }}"
-           class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg mb-6 transition">
-          Editar Categoría
-        </a>
-
-        <div class="bg-gray-50 px-6 py-6 border-t border-gray-200 mt-6">
-          <h3 class="text-xl font-semibold text-gray-900 mb-4">Posts de esta categoría</h3>
-
+        <div class="flex justify-end mb-6">
+          <a href="{{ route('categories.edit', $category->id) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 whitespace-nowrap">
+            Editar Categoría
+          </a>
+        </div>
+        <div class="bg-gray-50 px-4 py-6 border-t border-gray-200 mt-6 rounded overflow-x-auto max-w-full">
+          <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Posts de esta categoría</h3>
           @if ($category->posts->count())
-            <ul class="space-y-2 text-indigo-600 font-medium">
+            <ul class="space-y-2 text-indigo-600 font-medium max-w-full">
               @foreach ($category->posts as $post)
-                <li class="before:content-['📌'] before:mr-2">
-                  <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="hover:underline">{{ $post->title }}</a>
+                <li>
+                  <a href="{{ route('posts.show', ['id' => $post->id]) }}" class="flex items-center justify-between px-4 py-2 rounded-md border border-gray-200 hover:bg-indigo-50 transition group overflow-hidden max-w-full">
+                    <div class="flex items-center space-x-3 min-w-0 w-full overflow-hidden">
+                      <span class="w-3 h-3 rounded-full bg-indigo-600 group-hover:bg-indigo-800 transition shrink-0"></span>
+                      <span class="font-medium text-indigo-700 truncate group-hover:underline block w-full" title="{{ $post->title }}">
+                        {{ $post->title }}
+                      </span>
+                    </div>
+                    <svg class="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition shrink-0"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round"
+                         viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                  </a>
                 </li>
               @endforeach
             </ul>
           @else
             <p class="text-gray-500 italic mb-4">No hay posts en esta categoría.</p>
-            <a href="{{ route('posts.create') }}"
-               class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg transition">
+            <a href="{{ route('posts.create') }}" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-full transition whitespace-nowrap">
               Crear un nuevo post
             </a>
           @endif
         </div>
-
-        <div class="px-6 py-6">
-          <a href="{{ route('categories.index') }}"
-             class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg transition">
+        <div class="mt-6 flex justify-end">
+          <a href="{{ route('categories.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-full transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 whitespace-nowrap">
             ← Volver a Categorías
           </a>
         </div>
       </div>
-
     </div>
   </div>
 </x-app-layout>

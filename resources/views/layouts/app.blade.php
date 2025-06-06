@@ -27,7 +27,7 @@
                     </header>
                 @endisset
 
-                <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
+                <main class="flex-1 px-4 sm:px-6 lg:px-8 pb-14">
                  {{ $slot }}
                 </main>
             </div>
