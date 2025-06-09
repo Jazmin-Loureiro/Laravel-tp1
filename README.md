@@ -76,6 +76,11 @@ php artisan key:generate
 
 # Ejecutar migraciones
 php artisan migrate
+
+# Si por alguna razón las imágenes no se muestran, intenta regenerar el enlace simbólico
+rmdir public\storage
+php artisan storage:link
+
 ```
 
 ### ✅ Acceder a la aplicación
