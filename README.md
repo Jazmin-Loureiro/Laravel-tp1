@@ -138,7 +138,7 @@ Esto genera rutas, controladores y vistas para login, registro y manejo de sesio
 ![Editar Post](readme-img/editPost.png)
 
 ### Diseño Responsive 
-![Editar Post](readme-img/responsive.png)
+![LayoutResponsive](readme-img/responsive.jpg)
 
 
 
